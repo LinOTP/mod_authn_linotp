@@ -1,0 +1,17 @@
+Compiling
+---------
+
+libtoolize
+aclocal
+automake --add-missing
+autoconf
+
+./configure
+make
+
+Install
+-------
+
+make install
+
+

@@ -1,0 +1,101 @@
+mod_authn_linotp - Apache module for authenticating with LinOTP
+===============================================================
+
+This apache module can be used to authenticate users against
+LinOTP (http://linotp.org)
+
+This auth module only works with basic authentication.
+It uses a cookie to cache the authenticated user.
+The authentication of the first request is done against the LinOTP server.
+The consecutive requests are handled by the cookie.
+
+Configuration parameters:
+-------------------------
+
+The module can only be configured in a directory context.
+
+
+
+    LinOTPValidateURL
+		Context:	Dir
+		Format: 	https://server/validate/simplecheck
+		Default:	-
+		
+	LinOTPRealm
+		Context:	Dir
+		The realm name, the user will be authenticated in.
+		Format:		<string>
+		Default:	-
+
+    LinOTPResolver
+		Context:	Dir
+        The useridresolver, the user will be authenticated in.
+        Format:		<string>
+        Default:	-
+        
+    LinOTPCookieSecret
+    	Context:	Dir
+		A secret that is used to encrypt the cookie.
+		Format:		<string>
+		Default:	-
+        
+    LinOTPCookieName
+		Context:	Dir
+		The name of the cookie	
+		Format:		<string>
+		Default:	linotp_auth_module
+
+	LinOTPSSLCertVerify
+		Context:	Dir
+		Whether the certificate of the LinOTP server should be verified
+		Format:		On or Off
+		Default:	Off
+		
+	LinOTPSSLHostVerify
+		Context:	Dir
+		Whether the hostname in the certificate of the LinOTP server should be verified
+		Format:		On or Off
+		Default:	Off
+		
+	LinOTPLogUser
+		Context:	Dir
+		Whether the username should appear in the log file
+		Format:		On or Off
+		Default:	On
+		
+    LinOTPLogPassword
+    	Context:	Dir
+		Whether the password should appear in the log file
+		Format:		On or Off
+		Default:	Off
+		
+    LinOTPTimeout
+    	Context:	Dir
+		maximum time (in seconds) for which a one-time password is valid
+		Format:		a number
+		Default:	600
+		
+Example:
+========
+
+        <Directory /var/www/>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride None
+                Order allow,deny
+                allow from all
+
+                AuthType basic
+                AuthName "LinOTP protected"
+                AuthBasicProvider LinOTP
+                Require valid-user
+                LinOTPSSLCertVerify Off
+                LinOTPSSLHostVerify Off
+                LinOTPLogUser On
+                LinOTPLogPassword On
+                LinOTPCookieName myCookieName
+                LinOTPValidateUrl https://localhost/validate/simplecheck
+                LinOTPCookieSecret 098as0d9uasldj0a7sda
+                LinOTPRealm Realm1
+        </Directory>
+
+
