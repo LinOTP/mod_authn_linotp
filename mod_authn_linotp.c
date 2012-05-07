@@ -499,15 +499,10 @@ static char * createUrl(request_rec *r, CURL *curl_handle, char * validateurl, c
 	{
 		// reallocate
 		size = nchars +1;
-		url2 = (char*) realloc(url, size);
-		if (url2 == NULL)
+		url = (char*) myrealloc(url, size);
+		if (url == NULL)
 		{
-			free(url);
 	 	    ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_ERR, 0, r->server,"failed to alloc space for url + user and password");
-	 	    // we could as well do
-	 	    //   return NULL
-	 	    // but we go to cleanup
-	 	    url = NULL;
 	 		goto cleanup;
 		}
 		url = url2;
