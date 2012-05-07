@@ -433,6 +433,7 @@ static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *da
 static char * createUrl(request_rec *r, CURL *curl_handle, char * validateurl, char * realm, char * resConf, const char * user, const char * password)
 {
 	char * 	url 	= NULL;
+	char * url2		= NULL;
 	int size		= 300;
 	int nchars		= 0;
 
@@ -498,13 +499,19 @@ static char * createUrl(request_rec *r, CURL *curl_handle, char * validateurl, c
 	{
 		// reallocate
 		size = nchars +1;
-		url = (char*) realloc (url, size);
-		if (url == NULL)
+		url2 = (char*) realloc(url, size);
+		if (url2 == NULL)
 		{
+			free(url);
 	 	    ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_ERR, 0, r->server,"failed to alloc space for url + user and password");
+	 	    // we could as well do
+	 	    //   return NULL
+	 	    // but we go to cleanup
+	 	    url = NULL;
 	 		goto cleanup;
 		}
-
+		url = url2;
+		
 		memset(url,'\0',size);
 	        if (escRealm == NULL && escResConf == NULL ) 
 	        {
@@ -529,7 +536,6 @@ static char * createUrl(request_rec *r, CURL *curl_handle, char * validateurl, c
 	}
 
 cleanup:
-
 	return url;
 }
 static int sendRequest(request_rec *r, CURL *curl_handle, char * url,
