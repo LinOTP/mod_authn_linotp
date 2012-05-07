@@ -505,7 +505,6 @@ static char * createUrl(request_rec *r, CURL *curl_handle, char * validateurl, c
 	 	    ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_ERR, 0, r->server,"failed to alloc space for url + user and password");
 	 		goto cleanup;
 		}
-		url = url2;
 		
 		memset(url,'\0',size);
 	        if (escRealm == NULL && escResConf == NULL ) 
