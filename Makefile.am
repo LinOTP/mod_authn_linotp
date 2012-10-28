@@ -7,7 +7,7 @@ module: mod_authn_linotp.c
 install-exec-local: module
 		$(APXS) -S LIBEXECDIR="$(DESTDIR)`$(APXS) -q LIBEXECDIR`" -i mod_authn_linotp.la
 		
-install:
+install-data-local:
 		install authn_linotp.load $(DESTDIR)`$(APXS) -q SYSCONFDIR`/mods-available/
 
 install-exec-hook:
