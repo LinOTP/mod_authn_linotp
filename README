@@ -17,59 +17,69 @@ The module can only be configured in a directory context.
 
 
 	LinOTPValidateURL
+		mandatory
 		Context:	Dir
 		Format: 	https://server/validate/simplecheck
 		Default:	-
 
 	LinOTPRealm
+		optional
 		Context:	Dir
 		The realm name, the user will be authenticated in.
 		Format:		<string>
 		Default:	-
 
 	LinOTPResolver
+		optional
 		Context:	Dir
 		The useridresolver, the user will be authenticated in.
 		Format:		<string>
 		 Default:	-
 
 	LinOTPCookieSecret
+		mandatory
 		Context:	Dir
 		A secret that is used to encrypt the cookie.
 		Format:		<string>
 		Default:	-
 
 	LinOTPCookieName
+		optional
 		Context:	Dir
 		The name of the cookie	
 		Format:		<string>
 		Default:	linotp_auth_module
 
 	LinOTPSSLCertVerify
+		optional
 		Context:	Dir
 		Whether the certificate of the LinOTP server should be verified
 		Format:		On or Off
 		Default:	Off
 
 	LinOTPSSLHostVerify
+		optional
 		Context:	Dir
 		Whether the hostname in the certificate of the LinOTP server should be verified
 		Format:		On or Off
 		Default:	Off
 
 	LinOTPLogUser
+		optional
 		Context:	Dir
 		Whether the username should appear in the log file
 		Format:		On or Off
 		Default:	On
 
 	LinOTPLogPassword
+		optional
 		Context:	Dir
 		Whether the password should appear in the log file
 		Format:		On or Off
 		Default:	Off
 		
 	LinOTPTimeout
+		optional
 		Context:	Dir
 		maximum time (in seconds) for which a one-time password is valid
 		Format:		a number
