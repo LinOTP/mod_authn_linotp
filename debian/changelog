@@ -1,0 +1,6 @@
+mod-authn-linotp (0.0.1) unstable; urgency=low
+
+  * initial debian package.
+
+ -- Andreas Gabriel <gabriel@hrz.uni-marburg.de>  Tue, 06 May 2014 21:56:44 +0200
+
