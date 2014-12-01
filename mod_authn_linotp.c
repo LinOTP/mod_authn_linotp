@@ -33,6 +33,7 @@
 #include "ap_config.h"
 #include "ap_provider.h"
 #include "mod_auth.h"
+#include "ap_release.h"
 
 #define APR_WANT_STRFUNC
 #include "apr_want.h"
@@ -78,7 +79,7 @@ module AP_MODULE_DECLARE_DATA authn_linotp_module;
 #define DEFAULT_SSL_HOSTNAME_VERIFY		0
 #define DEFAULT_COOKIE_NAME				"linotp_auth_module"
 
-    
+
 /* Buffer size for OTPs */
 #define OTP_BUF_SIZE                    16
 
@@ -119,7 +120,13 @@ make_cookie(request_rec *r, time_t expires, const char *passwd, const char *stri
   char one[COOKIE_SIZE], two[COOKIE_SIZE];
   char *cookie = apr_pcalloc(r->pool, COOKIE_SIZE);
   conn_rec *c = r->connection;
+
   //server_rec *s = r->server;
+#if AP_SERVER_MINORVERSION_NUMBER < 4
+  char * remote_ip = c->remote_ip;
+#else
+  char * remote_ip = c->client_ip;
+#endif
  
   struct linotp_config *const scr = get_config_dir(r);
 
@@ -169,9 +176,10 @@ make_cookie(request_rec *r, time_t expires, const char *passwd, const char *stri
    * See Scheier, B, "Applied Cryptography" 2nd Ed., p.458
    * Also, RFC 2104.  I don't know if the HMAC gives any additional
    * benefit here.
-   */  
+   */
+
   apr_snprintf(one, COOKIE_SIZE, "%s%s%s%s%s%08x", scr->secret,
-	      r->user, passwd, c->remote_ip, hostname, (int)expires);
+	      r->user, passwd, remote_ip, hostname, (int)expires);
 
   /* MD5 the cookie to make it secure, and add more secret information */
   apr_snprintf(two, COOKIE_SIZE, "%s%s", scr->secret, ap_md5(r->pool, one));
