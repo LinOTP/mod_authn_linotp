@@ -646,7 +646,10 @@ authn_linotp_check_password(request_rec *r, const char *username, const char *ot
 		ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_DEBUG, 0, r->server, "Found cookie=%s for user=%s : ", cookie, r->user);
 		/* valid username, passwd, and expiry date: don't do LinOTP auth */
 		if (valid_cookie(r, cookie, otp_given)) {
-		  ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_DEBUG, 0, r->server,"cookie still valid.  Serving page.");
+		  ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_DEBUG, 0, r->server,"cookie still valid, renewing.  Serving page.");
+		  /* Renew active cookie with new timeout */
+		  expires = time(NULL) + conf->timeout;
+		  add_cookie(r, r->headers_out, cookie, expires);
 		  returnValue=AUTH_GRANTED;
 		  goto cleanup;
 		} else {			/* the cookie has probably expired */
