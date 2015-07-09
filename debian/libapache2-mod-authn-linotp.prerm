@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "remove" -o "$1" = "purge" ]; then
+	if [ -e /etc/apache2/apache2.conf -a -x /usr/sbin/a2dismod ]; then
+		/usr/sbin/a2dismod authn_linotp || true
+	fi
+fi
+
+#DEBHELPER#
+
+exit 0
